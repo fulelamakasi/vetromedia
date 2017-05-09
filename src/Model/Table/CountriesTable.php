@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Countries Model
@@ -42,6 +43,10 @@ class CountriesTable extends Table
 
         $this->hasMany('Users', [
             'foreignKey' => 'country_id'
+        ]);
+
+        $this->hasMany('Countries', [
+            'foreignKey' => 'currency_from'
         ]);
     }
 
@@ -99,5 +104,15 @@ class CountriesTable extends Table
         $rules->add($rules->isUnique(['code']));
 
         return $rules;
+    }
+
+    public function getCountry(array $condition){
+        $countries = TableRegistry::get('Countries');
+
+        $country = $countries->find('all')
+                                        ->where($condition)
+                                        ->toArray();
+
+        return $country;
     }
 }

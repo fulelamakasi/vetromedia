@@ -7,7 +7,6 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New Country'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
     </ul>
 </nav>
@@ -23,13 +22,13 @@
                 <th scope="col"><?= $this->Paginator->sort('currency_code') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('surge') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('editedby') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($countries as $country): ?>
+            <?php if(!empty($countries)){ ?>
+            <?php foreach($countries as $country): ?>
             <tr>
                 <td><?= $this->Number->format($country->id) ?></td>
                 <td><?= h($country->name) ?></td>
@@ -38,7 +37,6 @@
                 <td><?= h($country->currency_code) ?></td>
                 <td><?= $this->Number->format($country->surge) ?></td>
                 <td><?= h($country->created) ?></td>
-                <td><?= h($country->modified) ?></td>
                 <td><?= h($country->editedby) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $country->id]) ?>
@@ -58,5 +56,6 @@
             <?= $this->Paginator->last(__('last') . ' >>') ?>
         </ul>
         <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+        <?php } ?>
     </div>
 </div>

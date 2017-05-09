@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Model
@@ -83,5 +84,15 @@ class UsersTable extends Table
         $rules->add($rules->existsIn(['country_id'], 'Countries'));
 
         return $rules;
+    }
+
+    public function getUser(array $condition){
+        $users = TableRegistry::get('Users');
+
+        $user = $users->find('all')
+                            ->where($condition)
+                            ->toArray();
+
+        return $user;
     }
 }

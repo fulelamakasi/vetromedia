@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property string $currency
  * @property string $currency_code
  * @property float $surge
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $modified
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  * @property string $editedby
  *
  * @property \App\Model\Entity\User[] $users

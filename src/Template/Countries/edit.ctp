@@ -27,7 +27,7 @@
             echo $this->Form->control('currency');
             echo $this->Form->control('currency_code');
             echo $this->Form->control('surge');
-            echo $this->Form->control('editedby');
+            echo $this->Form->control('editedby', ['type' => 'hidden']);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

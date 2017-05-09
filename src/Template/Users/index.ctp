@@ -1,8 +1,3 @@
-<?php
-/**
-  * @var \App\View\AppView $this
-  */
-?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -31,6 +26,7 @@
             </tr>
         </thead>
         <tbody>
+            <?php if(!empty($users)){ ?>
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= $this->Number->format($user->id) ?></td>
@@ -62,5 +58,6 @@
             <?= $this->Paginator->last(__('last') . ' >>') ?>
         </ul>
         <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+        <?php } ?>
     </div>
 </div>

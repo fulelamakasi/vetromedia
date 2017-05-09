@@ -52,8 +52,8 @@ class CountriesFixture extends TestFixture
             'currency' => 'Lorem ipsum dolor sit amet',
             'currency_code' => 'Lorem ipsum dolor sit amet',
             'surge' => 1.5,
-            'created' => '2017-05-07 11:39:30',
-            'modified' => 1494157170,
+            'created' => '2017-05-08 16:12:51',
+            'modified' => 1494259971,
             'editedby' => 'Lorem ipsum dolor sit amet'
         ],
     ];

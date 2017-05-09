@@ -1,8 +1,3 @@
-<?php
-/**
-  * @var \App\View\AppView $this
-  */
-?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -29,7 +24,7 @@
             echo $this->Form->control('phonenumber');
             echo $this->Form->control('is_emailverified');
             echo $this->Form->control('country_id', ['options' => $countries]);
-            echo $this->Form->control('editedby');
+            echo $this->Form->control('editedby', ['type' => 'hidden']);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

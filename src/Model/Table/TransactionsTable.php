@@ -45,6 +45,11 @@ class TransactionsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->belongsTo('Countries', [
+            'foreignKey' => 'currency_from',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -109,7 +114,7 @@ class TransactionsTable extends Table
         return $rules;
     }
 
-    public function addTransaction(array $data){
+    public function setTransaction(array $data){
         $transactions = TableRegistry::get('Transactions');
         $transaction = $transactions->newEntity();
         $transactions->patchEntity($transaction, $data);
@@ -117,12 +122,21 @@ class TransactionsTable extends Table
         return $transactions->save($transactions);
     }
 
+    public function setTransactions(array $fields, array $conditions){
+        $transactions = TableRegistry::get('Transactions');
+
+        $transactions->updateAll($fields, $conditions);
+
+        return true;
+    }
+
     public function getTransaction(array $condition){
         $transactions = TableRegistry::get('Transactions');
         
         $transaction = $transactions->find('all')
-                                        ->where($condition);
-        
+                                        ->where($condition)
+                                        ->toArray();
+
         return $transaction;
     }
 }

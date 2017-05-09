@@ -1,6 +1,7 @@
 CREATE TABLE `vetromedia`.`users` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
   `firstname` VARCHAR(100) NOT NULL,
   `lastname` VARCHAR(100) NOT NULL,
   `emailaddress` VARCHAR(100) NOT NULL,
