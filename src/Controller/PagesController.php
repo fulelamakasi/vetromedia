@@ -7,6 +7,8 @@ use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
+use Cake\Network\Http\Client;
+use Cake\Event\Event;
 
 class PagesController extends AppController
 {
@@ -19,6 +21,12 @@ class PagesController extends AppController
         $this->transactions = TableRegistry::get('Transactions');
         $this->users = TableRegistry::get('Users');
     }
+
+    public function beforeFilter(Event $event){
+        parent::beforeFilter($event);
+        $this->Auth->allow(['compareratesnoneuser']);
+    }
+    
 
     public function display(...$path){
         $count = count($path);
@@ -47,12 +55,16 @@ class PagesController extends AppController
             throw new NotFoundException();
         }
     }
-
+//http://apilayer.net/api/list?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1 supported formats
     private function _setPostData(){
-//http://www.apilayer.net/api/live?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1
-//$this->request->getParam
-// $this->request->getData('');
-//$this->request->input('json_decode');
+        $http = new Client();
+        $response = $http->get('http://www.apilayer.net/api/live?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1');
+        $responseBody = json_decode($response->body);
+        
+        if($responseBody->success){
+            //return usd convert usd to 
+            debug($responseBody); die();
+        }
     }
 
     public function convertCurrency(){
@@ -65,7 +77,7 @@ class PagesController extends AppController
             $transaction = $this->_setTransaction();
 
             if($this->request->data['countryto'] == 2){
-               if(!$this->_setSendEmail($this->Auth->id, $transaction->id)){
+               if(!$this->_setSendEmail($this->Auth->user('id'), $transaction->id)){
                     $this->Flash->error(__('Could not process your email. Please, try again.'));
                     return $this->redirect(['action' => 'convertCurrency']);
                }
@@ -87,7 +99,8 @@ class PagesController extends AppController
     }
 
     public function compareratesnoneuser(){
-        if ($this->request->is('post')) {
+        if ($this->request->is('post')){
+            $this->_setPostData();
             if($this->_setCheckCountries()){
                 $this->Flash->error(__('The selected countries match. Please, try again.'));
                 return $this->redirect(['action' => 'compareratesnoneuser']);

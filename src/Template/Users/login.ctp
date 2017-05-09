@@ -5,15 +5,26 @@
         <li><?= $this->Html->link(__('Compare Rates'), ['controller' => 'Pages', 'action' => 'compareRatesNoneUser']) ?></li>
     </ul>
 </nav>
-<div class="users form large-9 medium-8 columns content">
-    <?= $this->Form->create() ?>
+<!-- <div class="users form large-9 medium-8 columns content">
+    <?//= $this->Form->create() ?>
     <fieldset>
-        <legend><?= __('Login') ?></legend>
-        <?php
+        <legend><?//= __('Login') ?></legend>
+        <?//php
             echo $this->Form->control('username', ['required' => true]);
             echo $this->Form->control('password', ['required' => true]);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+    <?//= $this->Form->button(__('Submit')) ?>
+    <?/= $this->Form->end() ?>
+</div> -->
+<div class="users form">
+<?= $this->Flash->render() ?>
+<?= $this->Form->create() ?>
+    <fieldset>
+        <legend><?= __('Please enter your username and password') ?></legend>
+        <?= $this->Form->control('username') ?>
+        <?= $this->Form->control('password') ?>
+    </fieldset>
+<?= $this->Form->button(__('Login')); ?>
+<?= $this->Form->end() ?>
 </div>
