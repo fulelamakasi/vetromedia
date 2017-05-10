@@ -20,11 +20,14 @@ class PagesController extends AppController
         $this->countries = TableRegistry::get('Countries');
         $this->transactions = TableRegistry::get('Transactions');
         $this->users = TableRegistry::get('Users');
+        $this->loadComponent('Auth', [
+                    'authorize' => 'Controller',
+        ]);
     }
 
     public function beforeFilter(Event $event){
         parent::beforeFilter($event);
-        $this->Auth->allow(['compareratesnoneuser']);
+        $this->Auth->allow('compareratesnoneuser');
     }
 
     public function display(...$path){
