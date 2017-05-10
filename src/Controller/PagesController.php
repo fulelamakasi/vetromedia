@@ -55,9 +55,6 @@ class PagesController extends AppController
             throw new NotFoundException();
         }
     }
-//http://apilayer.net/api/list?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1 supported formats
-    private function _setPostData(){
-    }
 
     public function convertCurrency(){
         if ($this->request->is('post')) {
@@ -65,7 +62,7 @@ class PagesController extends AppController
                 $this->Flash->error(__('The selected countries match. Please, try again.'));
                 return $this->redirect(['action' => 'convertCurrency']);
             }
-            
+
             $transaction = $this->_setTransaction();
 
             if($this->request->data['countryto'] == 2){
@@ -114,13 +111,44 @@ class PagesController extends AppController
         return false;
     }
 
+    private function _setTransactionData(){
+        $this->request->data[] = 'surge';
+        $this->request->data[] = 'surge_amount';
+        $this->request->data[] = 'original_price';
+        $this->request->data[] = 'user_id';
+        $this->request->data[] = 'editedby';
+        $this->request->data[] = 'currency_to_exhchangerate';
+        $this->request->data[] = 'converted_price';
+
+        return $this->request->data;
+    }
+
     private function _setTransaction(){
-        
+        $this->_setTransactionData();
+        $surge = $this->_setSurge($this->request->data['countryto'], $this->request->data['amount']);
+        $this->request->data['surge'] = $surge['surge']; 
+        $this->request->data['surge_amount'] = $surge['surge_amount'];
+        $this->request->data['original_price'] = $this->request->data['amount'];
+        $this->request->data['user_id'] = $this->Auth->user('id');
+        $this->request->data['editedby'] = $this->Auth->user('id');
+$this->request->data['currency_to_exhchangerate'] = 1;
+$this->request->data['converted_price'] = 1;
+
         return $this->transactions->setTransaction($this->request->data);
     }
 
-    private function _setSurge(){
-        
+    private function _setSurge($country_id = null, $amount = null){
+        $country = $this->countries->getCountry(['id' => $country_id]);
+
+        if($country['surge'] > 0){
+            $surgePercentage = $country['surge'] / 100;
+            $surgeAmount = $surgePercentage * $amount;
+        }
+
+        return [
+                'surge' => $country['surge'],
+                'surge_amount' => $surgeAmount,
+        ];
     }
 
     private function _setSendEmail($user_id = null, $transaction_id = null){
