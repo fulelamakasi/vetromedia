@@ -165,16 +165,16 @@ class PagesController extends AppController
         return true;
     }
 
-    private function _getJsonRates(){
+    private function _getJsonRates($country_id = null){
         $http = new Client();
         $response = $http->get('http://www.apilayer.net/api/live?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1');
         $responseBody = json_decode($response->body);
         
         if($responseBody->success){
-            //return usd convert usd to 
-            debug($responseBody); die();
+            return $this->_setConvertAmount($country_id, $response);
         }
 
+        return false;
     }
 
     private function _setGetCurrencyLayerCode($currency_code = null){
@@ -191,17 +191,23 @@ class PagesController extends AppController
                 }
             }
         }
+
         return false;
     }
 
 /* because am only allowed the usd source 
  * planning on converting the currency from its value to dollars then
  * convert dollars to the newer value     */
-    private function _setConvertFirstAmount(){
-        
-    }
+    private function _setConvertAmount($country_id = null, $response = null){
+        $country = $this->countries->getCountry(['id' => $country_id]);
+        $currecncies = explode(",", $response->quotes);
 
-    private function _setConvertSecondAmount(){
-        
+        foreach($currecncies as $currencies_code => $currencies_amount){
+            if(strcasecmp('USD'. $country['code'], $currencies_code) == 0){
+                return $currencies_amount;
+            }
+        }
+
+        return false;
     }
 }
