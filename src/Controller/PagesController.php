@@ -26,7 +26,6 @@ class PagesController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['compareratesnoneuser']);
     }
-    
 
     public function display(...$path){
         $count = count($path);
@@ -57,11 +56,18 @@ class PagesController extends AppController
     }
 
     public function convertCurrency(){
+        $this->request->data[] = 'currency_to_exhchangerate';
+        $this->request->data[] = 'converted_price';
+
         if ($this->request->is('post')) {
             if($this->_setCheckCountries()){
                 $this->Flash->error(__('The selected countries match. Please, try again.'));
                 return $this->redirect(['action' => 'convertCurrency']);
             }
+
+            $amount = $this->_setConvertFromDollars($this->request->data['countryfrom'], $this->request->data['countryto'], $this->request->data['amount']);
+            $this->request->data['currency_to_exhchangerate'] = $amount['rateAmount'];
+            $this->request->data['converted_price'] = $amount['convertedAmount'];
 
             $transaction = $this->_setTransaction();
 
@@ -117,8 +123,6 @@ class PagesController extends AppController
         $this->request->data[] = 'original_price';
         $this->request->data[] = 'user_id';
         $this->request->data[] = 'editedby';
-        $this->request->data[] = 'currency_to_exhchangerate';
-        $this->request->data[] = 'converted_price';
 
         return $this->request->data;
     }
@@ -131,8 +135,6 @@ class PagesController extends AppController
         $this->request->data['original_price'] = $this->request->data['amount'];
         $this->request->data['user_id'] = $this->Auth->user('id');
         $this->request->data['editedby'] = $this->Auth->user('id');
-$this->request->data['currency_to_exhchangerate'] = 1;
-$this->request->data['converted_price'] = 1;
 
         return $this->transactions->setTransaction($this->request->data);
     }
@@ -172,6 +174,7 @@ $this->request->data['converted_price'] = 1;
             $email->send($message);
             return true;
         }
+
         return false;
     }
 
@@ -226,6 +229,7 @@ $this->request->data['converted_price'] = 1;
 /* because am only allowed the usd source 
  * planning on converting the currency from its value to dollars then
  * convert dollars to the newer value     */
+
     private function _setConvertAmount($country_id = null, $response = null){
         $country = $this->countries->getCountry(['id' => $country_id]);
         $currecncies = explode(",", $response->quotes);
@@ -237,5 +241,23 @@ $this->request->data['converted_price'] = 1;
         }
 
         return false;
+    }
+
+    private function _setConvertToDollars($country_from = null, $originalAmount = null){
+        $dollarAmount = $originalAmount * $this->_getJsonRates($country_from);
+
+        return [
+                'dollarAmount' => $dollarAmount,
+                'rateAmount' => $this->_getJsonRates($country_from)
+        ];
+    }
+
+    private function _setConvertFromDollars($country_from = null, $country_to = null, $originalAmount = null){
+        $dollars = $this->_setConvertToDollars($country_from, $originalAmount);
+
+        return [
+                'convertedAmount' => $dollars['dollarAmount'] * $this->_getJsonRates($country_to),
+                'rateAmount' => $dollars['rateAmount'],
+        ];
     }
 }

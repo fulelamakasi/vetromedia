@@ -119,7 +119,9 @@ class TransactionsTable extends Table
         $transaction = $transactions->newEntity();
         $transactions->patchEntity($transaction, $data);
 
-        return $transactions->save($transactions);
+        $transaction = $transactions->save($transaction);
+
+        return $transaction;
     }
 
     public function setTransactions(array $fields, array $conditions){
