@@ -57,14 +57,6 @@ class PagesController extends AppController
     }
 //http://apilayer.net/api/list?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1 supported formats
     private function _setPostData(){
-        $http = new Client();
-        $response = $http->get('http://www.apilayer.net/api/live?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1');
-        $responseBody = json_decode($response->body);
-        
-        if($responseBody->success){
-            //return usd convert usd to 
-            debug($responseBody); die();
-        }
     }
 
     public function convertCurrency(){
@@ -174,6 +166,42 @@ class PagesController extends AppController
     }
 
     private function _getJsonRates(){
-//call me to get json rates post rates http://www.apilayer.net/api/live?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1
+        $http = new Client();
+        $response = $http->get('http://www.apilayer.net/api/live?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1');
+        $responseBody = json_decode($response->body);
+        
+        if($responseBody->success){
+            //return usd convert usd to 
+            debug($responseBody); die();
+        }
+
+    }
+
+    private function _setGetCurrencyLayerCode($currency_code = null){
+        $http = new Client();
+        $response = $http->get('http://apilayer.net/api/list?access_key=1a0d14517d102c63014a66a5485a8b0f&format=1');
+        $responseBody = json_decode($response->body);
+        
+        if($responseBody->success){
+            $currecncies = explode(",", $responseBody->currencies);
+
+            foreach($currecncies as $currencies_code => $currencies_name){
+                if(strcasecmp($currency_code, $currencies_code) == 0){
+                    return $currencies_code;
+                }
+            }
+        }
+        return false;
+    }
+
+/* because am only allowed the usd source 
+ * planning on converting the currency from its value to dollars then
+ * convert dollars to the newer value     */
+    private function _setConvertFirstAmount(){
+        
+    }
+
+    private function _setConvertSecondAmount(){
+        
     }
 }
