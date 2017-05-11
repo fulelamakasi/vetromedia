@@ -5,8 +5,45 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 <body>
-    <div>Test 1</div>
-    <div>Test 2</div>
-    <div>Test 3</div>
+    <div><b>Requirements (Dev - Environment)</b><br />
+        <ul>
+            <li>PHP 5.6 < </li>
+            <li>GitHub Account</li>
+            <li>MySQL 5.6 < </li>
+            <li>Apache2 Web-Server</li>
+            <li>Apache2-CakePHP-Libraries</li>
+            <li>Any PHP code editor</li>
+            <li>Any SQL editor (HeidiSQL, MySQL-WorkBench)</li>
+        </ul>
+    </div>
+    <div><b>Installation</b> <br />
+        <b>MySQL-Schema</b> <br />
+        <ul>
+            <li>Under the src there is a sql directory:</li>
+            <li>If you do not already have one create a root user in your MySQL
+                with a password of 12345678.</li>
+            <li>Start off by creating your database run vetromedia.sql in your
+                sql editor or from command line prompt.</li>
+            <li>First start by running the countries.sql</li>
+            <li>Then run the countriesdata.sql</li>
+            <li>After creating the countries in inserting the default data 
+                you can now create users</li>
+            <li>After the users.sql file you can now create the transactions 
+                table from transactions.sql</li>
+        </ul>
+        <b>CakePHP Application</b> <br />
+        <ul>
+            <li>From the root of your web projects run</li>
+            <li>git clone https://github.com/fulelamakasi/vetromedia.git</li>
+            <li>This will pull the project to your local machine</li>
+            <li>Set up the local environment according to your machine standards 
+                i.e on Ubuntu the project would be in /var/www/vetromedia then 
+                setting up the vhosts etc.</li>
+            <li>Inside the cake project navigate your way inside config/app.php 
+                change the Email username and password if you're using gmail 
+                allow lesser apps on your gmail account.</li>
+            <li>Now you should be able to run the application locally.</li>
+        </ul>
+    </div>
 </body>
 </html>
