@@ -104,6 +104,11 @@ class PagesController extends AppController
                 return $this->redirect(['action' => 'compareratesnoneuser']);
             }
 
+            $conversion = $this->_setConvertFromDollars($this->request->data['countryfrom'], $this->request->data['countryto'], $this->request->data['amount']);
+
+            $this->Flash->success('Successfully converted '. $this->request->data['amount'] .' to '. $conversion['convertedAmount'] .' with the following rates'. $conversion['rateAmount']);
+
+            return $this->redirect(['action' => 'compareratesnoneuser']);
         }
 
         $countryfrom = $this->countries->find('list', ['limit' => 200]);
